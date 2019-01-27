@@ -4,7 +4,7 @@ import CreateForm from "./components/CreateForm";
 import TodoList from "./components/TodoList";
 
 class App extends Component {
-  id = 3;
+  // 상태값을 저장
   state = {
     // 그 초깃값은 배열 형태로 넣어주었고, 내부에 기본 값들을 넣어주었습니다.
     todos: [
@@ -25,9 +25,12 @@ class App extends Component {
       }
     ]
   };
+
+  // 생성하는 함수
   handleCreate = input => {
+    let id = this.state.todos.length;
     const todo = {
-      id: ++this.id,
+      id: ++id,
       text: input,
       checked: false
     };
@@ -35,17 +38,39 @@ class App extends Component {
       todos: this.state.todos.concat(todo)
     });
   };
+
+  // 지우는 함수
   handleRemove = id => {
     this.setState({
-      todos: this.state.todos.filter(todo => {})
+      todos: this.state.todos.filter(todo => id !== todo.id)
     });
   };
+
+  handleDone = id => {
+    this.setState({
+      todos: this.state.todos.map(todo => {
+        if (id === todo.id) {
+          return {
+            ...todo, // 나머지는 알아서 다 집어넣기
+            checked: !todo.checked
+          };
+        }
+        return todo;
+      })
+    });
+  };
+
+  // 그려지는 부분
   render() {
     const { todos } = this.state;
     return (
       <div className="App">
         <CreateForm onCreate={this.handleCreate} />
-        <TodoList todos={todos} />
+        <TodoList
+          onRemove={this.handleRemove}
+          onDone={this.handleDone}
+          todos={todos}
+        />
       </div>
     );
   }
