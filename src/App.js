@@ -2,64 +2,94 @@ import React, { Component } from "react";
 import "./App.css";
 import CreateForm from "./components/CreateForm";
 import TodoList from "./components/TodoList";
+import axios from "axios";
 
 class App extends Component {
-  // 상태값을 저장
   state = {
-    // 그 초깃값은 배열 형태로 넣어주었고, 내부에 기본 값들을 넣어주었습니다.
-    todos: [
-      {
-        id: 0,
-        text: "앵귤러 배우고",
-        checked: true
-      },
-      {
-        id: 1,
-        text: "리액트 배우고",
-        checked: false
-      },
-      {
-        id: 2,
-        text: "뷰 배우자",
-        checked: false
-      }
-    ]
+    todos: []
   };
 
-  // 생성하는 함수
   handleCreate = input => {
-    let id = this.state.todos.length;
     const todo = {
-      id: ++id,
-      text: input,
-      checked: false
+      Title: input,
+      Checked: false
     };
-    this.setState({
-      todos: this.state.todos.concat(todo)
-    });
+    axios({
+      method: "post",
+      url: "http://localhost:1323/api/v1/todos",
+      data: todo
+    })
+      .then(response => {
+        this.setState({
+          todos: this.state.todos.concat(response.data)
+        });
+        return response.data;
+      })
+      .catch(err => {
+        console.log(err);
+      });
   };
 
   // 지우는 함수
   handleRemove = id => {
-    this.setState({
-      todos: this.state.todos.filter(todo => id !== todo.id)
-    });
+    axios({
+      method: "delete",
+      url: "http://localhost:1323/api/v1/todos/" + id
+    })
+      .then(response => {
+        this.setState({
+          todos: this.state.todos.filter(todo => id !== todo.ID)
+        });
+      })
+      .catch(err => {
+        console.log(err);
+      });
   };
 
   handleDone = id => {
-    this.setState({
-      todos: this.state.todos.map(todo => {
-        if (id === todo.id) {
-          return {
-            ...todo, // 나머지는 알아서 다 집어넣기
-            checked: !todo.checked
-          };
-        }
-        return todo;
+    const todo = this.state.todos.filter(todo => id === todo.ID);
+
+    axios
+      .patch("http://localhost:1323/api/v1/todos/" + id, {
+        Title: todo[0].Title,
+        Checked: !todo[0].Checked
       })
-    });
+      .then(response => {
+        console.log(response);
+        this.setState({
+          todos: this.state.todos.map(todo => {
+            if (id === todo.ID) {
+              return {
+                ...todo,
+                Checked: !todo.Checked
+              };
+            }
+            return todo;
+          })
+        });
+      })
+      .catch(err => {
+        console.log(err);
+      });
   };
 
+  componentDidMount() {
+    axios
+      .get("http://localhost:1323/api/v1/todos")
+      .then(response => {
+        let todos = [];
+        if (response.status === 200) {
+          todos = response.data;
+        }
+        this.setState({
+          todos: todos
+        });
+      })
+      .catch(err => {
+        console.log(err);
+        alert(err);
+      });
+  }
   // 그려지는 부분
   render() {
     const { todos } = this.state;

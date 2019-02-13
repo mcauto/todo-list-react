@@ -13,9 +13,6 @@ class CreateForm extends Component {
       alert("입력해라 좋은 말로 할 때");
     } else {
       this.props.onCreate(this.state.input);
-      this.setState({
-        input: ""
-      });
     }
   };
 

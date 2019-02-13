@@ -10,17 +10,17 @@ class TodoItem extends Component {
     const { onRemove, onDone } = this.props;
     return (
       <div
-        className={`TodoItem ${todo.checked && "active"}`}
+        className={`TodoItem ${todo.Checked && "active"}`}
         onClick={e => {
-          onDone(todo.id);
+          onDone(todo.ID);
         }}
       >
         <div className="check">&#10004;</div>
-        <div className="text">{todo.text}</div>
+        <div className="text">{todo.Title}</div>
         <div
           className="remove"
           onClick={e => {
-            onRemove(todo.id);
+            onRemove(todo.ID);
             e.stopPropagation();
           }}
         >

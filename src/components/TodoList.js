@@ -18,7 +18,7 @@ class TodoList extends Component {
               <TodoItem
                 onRemove={onRemove}
                 onDone={onDone}
-                key={todo.id}
+                key={todo.ID}
                 todo={todo}
               />
             );
