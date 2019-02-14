@@ -3,6 +3,6 @@
 Todo list front-end with react + axios
 
 ```bash
-$ yarn install
-$ yarn start
+$ make backend # terminal block, required install go, dep
+$ make front # another terminal
 ```

@@ -16,7 +16,7 @@ class TodoItem extends Component {
         }}
       >
         <div className="check">&#10004;</div>
-        <div className="text">{todo.Title}</div>
+        <div className="text">{todo.Text}</div>
         <div
           className="remove"
           onClick={e => {

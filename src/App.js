@@ -11,7 +11,7 @@ class App extends Component {
 
   handleCreate = input => {
     const todo = {
-      Title: input,
+      Text: input,
       Checked: false
     };
     axios({
@@ -46,12 +46,13 @@ class App extends Component {
       });
   };
 
+  // 체크 활성 비활성 함수
   handleDone = id => {
     const todo = this.state.todos.filter(todo => id === todo.ID);
 
     axios
       .patch("http://localhost:1323/api/v1/todos/" + id, {
-        Title: todo[0].Title,
+        Text: todo[0].Text,
         Checked: !todo[0].Checked
       })
       .then(response => {
